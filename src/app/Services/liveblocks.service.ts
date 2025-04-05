@@ -2,9 +2,14 @@ import { Injectable } from '@angular/core';
 import { createClient, Room } from '@liveblocks/client';
 import { environment } from '../../environments/environment';
 
+type Cursor = {
+  cursor: { x: number; y: number };
+};
+
 @Injectable()
 export class LiveblocksService {
   private room: Room | null = null;
+  cursor: Cursor | null = null;
 
   constructor() {
     const client = createClient({

@@ -1,0 +1,25 @@
+.chat {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.container-chat {
+  position: absolute;
+  left: 8px;
+  top: 20px;
+  background-color: rgb(78, 78, 232);
+  padding: 4px 16px;
+  font-size: 12px;
+  color: white;
+  border-radius: 20px;
+}
+
+.comment-user {
+  z-index: 10;
+  width: 200px;
+  border: none;
+  color: white;
+  background-color: transparent;
+  outline: none;
+}

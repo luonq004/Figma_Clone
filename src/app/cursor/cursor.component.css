@@ -4,3 +4,17 @@
   top: 0;
   left: 0;
 }
+
+.message-container {
+  position: absolute;
+  left: 4px;
+  top: 20px;
+}
+
+.message-input {
+  border-radius: 20px;
+  padding: 4px 20px;
+  color: white;
+  white-space: nowrap;
+  font-size: 12px;
+}

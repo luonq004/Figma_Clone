@@ -37,8 +37,7 @@ export class MouseHandleService {
     this.emitPointerDown(event);
   };
 
-  private handlePointerLeave = (event: PointerEvent) => {
-    event.preventDefault();
+  private handlePointerLeave = () => {
     this.ngZone.run(() => {
       this.pointerLeave.next();
     });

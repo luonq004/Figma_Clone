@@ -1,0 +1,21 @@
+<div *ngFor="let user of others; trackBy: trackByIndex" class="container">
+  <ng-container *ngIf="cursor && cursor?.cursor">
+    <app-chat
+      [cursorUser]="cursor"
+      [modeState]="cursorState"
+      (updateModeState)="updateMode($event)"
+      (updateMyPresence)="updateMyPresence($event)"
+    ></app-chat>
+  </ng-container>
+
+  <!-- Cursor -->
+  <ng-container #cursorArea *ngIf="user.presence.cursor">
+    <app-cursor
+      [key]="user.connectionId"
+      [color]="colors[+user.connectionId % colors.length]"
+      [x]="user.presence.cursor.x"
+      [y]="user.presence.cursor.y"
+      [message]="user.presence.message"
+    ></app-cursor>
+  </ng-container>
+</div>

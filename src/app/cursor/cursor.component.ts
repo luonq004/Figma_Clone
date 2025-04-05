@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
+import { CursorSVGComponent } from '../components/shared/cursor-svg/cursor-svg.component';
 
 @Component({
   selector: 'app-cursor',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CursorSVGComponent],
   templateUrl: './cursor.component.html',
   styleUrl: './cursor.component.css',
 })

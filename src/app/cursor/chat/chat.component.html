@@ -1,1 +1,30 @@
-<p>chat works!</p>
+<div
+  class="chat"
+  [ngStyle]="{
+    transform:
+      'translateX(' +
+      cursorUser.cursor.x +
+      'px) translateY(' +
+      cursorUser.cursor.y +
+      'px)'
+  }"
+>
+  <ng-container *ngIf="isChatMode">
+    <cursor-svg [color]="'#333'"></cursor-svg>
+
+    <ng-container *ngIf="hasPreviousMessage">
+      <div class="container-chat">
+        <div>{{ messagePre }}</div>
+        <input
+          class="comment-user"
+          type="text"
+          (input)="handleChagne($event)"
+          (keydown)="handleKeyDown($event)"
+          [value]="cursorUser.message ? cursorUser.message : ''"
+          [placeholder]="hasPreviousMessage ? '' : 'Type a message...'"
+          autofocus
+        />
+      </div>
+    </ng-container>
+  </ng-container>
+</div>
