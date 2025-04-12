@@ -13,7 +13,7 @@
     <cursor-svg [color]="'#333'"></cursor-svg>
 
     <ng-container *ngIf="hasPreviousMessage">
-      <div class="container-chat">
+      <div class="container-chat" (keyup)="onKeyUp($event)">
         <div>{{ messagePre }}</div>
         <input
           class="comment-user"

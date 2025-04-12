@@ -1,0 +1,14 @@
+.reaction-box {
+  position: absolute;
+  bottom: 5rem; /* bottom-20 tương đương 5rem */
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto; /* mx-auto */
+  width: fit-content; /* w-fit */
+  transform: translateZ(0); /* transform để giữ hiệu ứng nếu cần */
+  border-radius: 9999px; /* rounded-full */
+  background-color: white; /* bg-white */
+  padding-left: 0.5rem;
+  padding-right: 0.5rem; /* px-2 = 0.5rem */
+}

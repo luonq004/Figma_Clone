@@ -10,7 +10,6 @@ import { CursorSVGComponent } from '../components/shared/cursor-svg/cursor-svg.c
   styleUrl: './cursor.component.css',
 })
 export class CursorComponent {
-  @Input() key: number | null = null;
   @Input() color: string = '';
   @Input() x: number = 0;
   @Input() y: number = 0;

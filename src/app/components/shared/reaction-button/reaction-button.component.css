@@ -1,0 +1,17 @@
+.reaction-button {
+  user-select: none;
+  padding: 0.5rem; /* tương đương p-2 */
+  font-size: 1.25rem; /* tương đương text-xl */
+  transition: transform 0.2s ease; /* transition-transform */
+  border: none;
+  background-color: transparent;
+}
+
+.reaction-button:hover,
+.reaction-button:focus {
+  transform: scale(1.5); /* hover:scale-150 và focus:scale-150 */
+}
+
+.reaction-button:focus {
+  outline: none; /* focus:outline-none */
+}

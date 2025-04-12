@@ -1,0 +1,26 @@
+.navbar {
+  display: flex;
+  user-select: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem; /* 4 = 1rem nếu dùng Tailwind */
+  background-color: #000; /* hoặc thay bằng biến màu nếu có: var(--primary-black) */
+  padding-left: 1.25rem; /* px-5 = 1.25rem */
+  padding-right: 1.25rem;
+  color: white;
+}
+
+.nav-list {
+  display: flex;
+  flex-direction: row;
+}
+
+.nav-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 0.625rem; /* px-2.5 = 10px = 0.625rem */
+  padding-right: 0.625rem;
+  padding-top: 1.25rem; /* py-5 = 20px = 1.25rem */
+  padding-bottom: 1.25rem;
+}

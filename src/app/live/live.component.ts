@@ -9,36 +9,52 @@ import {
 import { BaseUserMeta, Room, User } from '@liveblocks/client';
 import { Subscription } from 'rxjs';
 import { COLORS } from '../../../constants';
-import { CursorMode, CursorState, Presence } from '../../types/type';
+import {
+  CursorMode,
+  CursorState,
+  Presence,
+  Reaction,
+  ReactionEvent,
+} from '../../types/type';
 import { ChatComponent } from '../cursor/chat/chat.component';
 import { CursorComponent } from '../cursor/cursor.component';
 import { LiveblocksService } from '../Services/liveblocks.service';
 import { MouseHandleService } from '../Services/mousehandle.service';
+import { ReactionComponent } from '../reaction/reaction.component';
+import { FlyingReactionComponent } from '../reaction/flying-reaction/flying-reaction.component';
+import { IntervalService } from '../Services/interval.service';
 
 @Component({
   selector: 'app-live',
   standalone: true,
-  imports: [CommonModule, CursorComponent, ChatComponent],
+  imports: [
+    CommonModule,
+    CursorComponent,
+    ChatComponent,
+    ReactionComponent,
+    FlyingReactionComponent,
+  ],
   templateUrl: './live.component.html',
   styleUrl: './live.component.css',
-  providers: [MouseHandleService],
+  providers: [MouseHandleService, IntervalService],
 })
 export class LiveComponent implements OnInit, OnDestroy {
   private room: Room | null = null;
   private subscriptions: Subscription[] = [];
+
   others: readonly User<Presence, BaseUserMeta>[] | null = null;
   colors = COLORS;
-
   cursor: any;
-
   cursorState: CursorState = {
     mode: CursorMode.Hidden,
   };
+  reaction: Reaction[] = [];
 
   constructor(
     private liveblocksService: LiveblocksService,
     private elementRef: ElementRef,
-    private mouseService: MouseHandleService
+    private mouseService: MouseHandleService,
+    private intervalService: IntervalService
   ) {}
 
   @HostListener('window:keyup', ['$event'])
@@ -75,7 +91,50 @@ export class LiveComponent implements OnInit, OnDestroy {
       this.room.subscribe('others', (others) => {
         this.others = others;
       });
+
+      this.room.subscribe('event', (eventData) => {
+        const event = eventData.event as ReactionEvent;
+
+        this.reaction = this.reaction.concat([
+          {
+            point: {
+              x: event.x,
+              y: event.y,
+            },
+            value: event.value,
+            timestamp: Date.now(),
+          },
+        ]);
+      });
     }
+
+    this.intervalService.startInterval(() => {
+      if (
+        this.cursorState.mode === CursorMode.Reaction &&
+        this.cursorState.isPressed &&
+        this.cursor
+      ) {
+        this.reaction = this.reaction.concat([
+          {
+            point: { x: this.cursor.cursor.x, y: this.cursor.cursor.y },
+            value: this.cursorState.reaction,
+            timestamp: Date.now(),
+          },
+        ]);
+
+        this.room?.broadcastEvent({
+          x: this.cursor.cursor.x,
+          y: this.cursor.cursor.y,
+          value: this.cursorState.reaction,
+        });
+      }
+    }, 100);
+
+    this.intervalService.startInterval(() => {
+      this.reaction = this.reaction.filter(
+        (r) => r.timestamp > Date.now() - 4000
+      );
+    }, 1000);
 
     this.mouseService.attachMouseListeners(this.elementRef.nativeElement);
 
@@ -98,6 +157,18 @@ export class LiveComponent implements OnInit, OnDestroy {
       this.mouseService.pointerDown$.subscribe(({ x, y }) => {
         this.cursor = { cursor: { x, y } };
         this.updateMyPresence(this.cursor);
+
+        if (this.cursorState.mode === CursorMode.Reaction) {
+          this.cursorState = { ...this.cursorState, isPressed: true };
+        }
+      })
+    );
+
+    this.subscriptions.push(
+      this.mouseService.pointerUp$.subscribe(() => {
+        if (this.cursorState.mode === CursorMode.Reaction) {
+          this.cursorState = { ...this.cursorState, isPressed: true };
+        }
       })
     );
   }
@@ -109,7 +180,6 @@ export class LiveComponent implements OnInit, OnDestroy {
       message: string | null;
     }>
   ) {
-    // console.log(presence);
     this.room?.updatePresence(presence);
   }
 
@@ -117,13 +187,22 @@ export class LiveComponent implements OnInit, OnDestroy {
     this.cursorState = state;
   }
 
-  trackByIndex(index: number, item: any): number {
-    return index; // Trả về index để theo dõi vị trí của item
+  updateReaction(reaction: string) {
+    this.cursorState = {
+      mode: CursorMode.Reaction,
+      reaction,
+      isPressed: false,
+    };
+  }
+
+  get isReactionState(): boolean {
+    return this.cursorState.mode === CursorMode.ReactionSelector;
   }
 
   ngOnDestroy() {
     this.mouseService.detachMouseListeners(this.elementRef.nativeElement);
     this.subscriptions.forEach((sub) => sub.unsubscribe());
     this.room?.disconnect();
+    this.intervalService.ngOnDestroy();
   }
 }

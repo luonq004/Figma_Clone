@@ -40,7 +40,6 @@ export class ChatComponent {
   }
 
   handleChagne(e: Event) {
-    console.log('adasdsa');
     const target = e.target as HTMLInputElement;
 
     this.updateMyPresence.emit({ message: target.value });
@@ -63,6 +62,10 @@ export class ChatComponent {
         mode: CursorMode.Hidden,
       });
     }
+  }
+
+  onKeyUp(event: KeyboardEvent) {
+    event.stopPropagation();
   }
 
   get hasPreviousMessage(): boolean {

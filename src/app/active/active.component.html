@@ -1,0 +1,16 @@
+<div class="flex items-center justify-center gap-1 py-2">
+  <div class="flex pl-3">
+    @if(currentUser) {
+      <avatar name="You" otherStyles="border-[3px] border-green-700"></avatar>
+    }
+
+    @for (user of displayUser; track $index) {
+      <avatar [name]="genRandomName" otherStyles="-ml-3"></avatar>
+    }
+
+    @if((others?.length ?? 0) > 3) {
+      <div class="z-10 -ml-3 flex h-9 w-9 items-center justify-center rounded-full bg-black">+{{(others?.length ?? 0) - 2}}</div>
+    }
+
+  </div>
+</div>

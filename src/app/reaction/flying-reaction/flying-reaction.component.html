@@ -1,0 +1,10 @@
+<div
+  class="fly-box"
+  [ngStyle]="{ 'font-size': (timestamp % 5) + 2, left: x + 'px', top: y + 'px' }"
+  [ngClass]="'goUp' + (timestamp % 3)"
+>
+  <div [ngClass]="'leftRight' + (timestamp % 3) ">
+    <div class="transform-box">{{value}}</div>
+  </div>
+
+</div>
