@@ -1,6 +1,5 @@
 import { BaseUserMeta, User } from '@liveblocks/client';
 import { Gradient, Pattern } from 'fabric/fabric-impl';
-import { FabricObject, Path } from 'fabric';
 
 export enum CursorMode {
   Hidden,
@@ -65,18 +64,32 @@ export type ActiveElement = {
   icon: string;
 } | null;
 
-export interface CustomFabricObject<T extends FabricObject>
-  extends FabricObject {
+type SimpleElement = {
+  icon: string;
+  name: string;
+  value: string;
+};
+
+export type NestedElement = {
+  icon: string;
+  name: string;
+  value: SimpleElement[];
+};
+
+export type ActiveElementCus = SimpleElement | NestedElement;
+
+export interface CustomFabricObject<T extends fabric.Object>
+  extends fabric.Object {
   objectId?: string;
 }
 
-// export type ModifyShape = {
-//   canvas: fabric.Canvas;
-//   property: string;
-//   value: any;
-//   activeObjectRef: React.MutableRefObject<fabric.Object | null>;
-//   syncShapeInStorage: (shape: fabric.Object) => void;
-// };
+export type ModifyShape = {
+  canvas: fabric.Canvas;
+  property: string;
+  value: any;
+  activeObjectRef: fabric.Object | null;
+  syncShapeInStorage: (shape: fabric.Object) => void;
+};
 
 export type ElementDirection = {
   canvas: fabric.Canvas;
@@ -84,12 +97,12 @@ export type ElementDirection = {
   syncShapeInStorage: (shape: fabric.Object) => void;
 };
 
-// export type ImageUpload = {
-//   file: File;
-//   canvas: React.MutableRefObject<fabric.Canvas>;
-//   shapeRef: React.MutableRefObject<fabric.Object | null>;
-//   syncShapeInStorage: (shape: fabric.Object) => void;
-// };
+export type ImageUpload = {
+  file: File;
+  canvas: fabric.Canvas;
+  shapeRef: fabric.Object | null;
+  syncShapeInStorage: (shape: fabric.Object) => void;
+};
 
 // export type RightSidebarProps = {
 //   elementAttributes: Attributes;
@@ -98,6 +111,13 @@ export type ElementDirection = {
 //   activeObjectRef: React.RefObject<fabric.Object | null>;
 //   isEditingRef: React.MutableRefObject<boolean>;
 //   syncShapeInStorage: (obj: any) => void;
+// };
+
+// export type NavbarProps = {
+//   activeElement: ActiveElement;
+//   imageInputRef: React.MutableRefObject<HTMLInputElement | null>;
+//   handleImageUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
+//   handleActiveElement: (element: ActiveElement) => void;
 // };
 
 export type ShapesMenuProps = {
@@ -114,17 +134,17 @@ export type ShapesMenuProps = {
 
 export type Presence = any;
 
-export type LiveCursor = {
+export type LiveCursorProps = {
   others: readonly User<Presence, BaseUserMeta>[];
 };
 
-// export type CanvasMouseDown = {
-//   options: fabric.IEvent;
-//   canvas: fabric.Canvas;
-//   selectedShapeRef: any;
-//   isDrawing: React.MutableRefObject<boolean>;
-//   shapeRef: React.MutableRefObject<fabric.Object | null>;
-// };
+export type CanvasMouseDown = {
+  options: fabric.IEvent;
+  canvas: fabric.Canvas;
+  selectedShapeRef: any;
+  isDrawing: boolean;
+  shapeRef: fabric.Object | null;
+};
 
 // export type CanvasMouseMove = {
 //   options: fabric.IEvent;
@@ -145,15 +165,15 @@ export type LiveCursor = {
 //   setActiveElement: any;
 // };
 
-export type CanvasObjectModified = {
-  options: fabric.IEvent;
-  syncShapeInStorage: (shape: fabric.Object) => void;
-};
+// export type CanvasObjectModified = {
+//   options: fabric.IEvent;
+//   syncShapeInStorage: (shape: fabric.Object) => void;
+// };
 
-export type CanvasPathCreated = {
-  options: (fabric.IEvent & { path: CustomFabricObject<Path> }) | any;
-  syncShapeInStorage: (shape: fabric.Object) => void;
-};
+// export type CanvasPathCreated = {
+//   options: (fabric.IEvent & { path: CustomFabricObject<fabric.Path> }) | any;
+//   syncShapeInStorage: (shape: fabric.Object) => void;
+// };
 
 // export type CanvasSelectionCreated = {
 //   options: fabric.IEvent;

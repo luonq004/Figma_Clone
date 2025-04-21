@@ -1,5 +1,35 @@
-<nav class="navbar">
+<nav class="flex select-none items-center justify-between gap-4 bg-black px-5 text-white">
   <img src="assets/logo.svg" alt="FigPro Logo" style="width: 58px; height: 20px;">
+
+  <ul class="flex flex-row">
+    @for (item of navItems; track item.name) {
+      <li [ngClass]="['group px-2.5 py-5 flex justify-center items-center',
+        isActive(item.value) ? 'bg-green-500' : 'hover:bg-gray-500'
+      ]" (click)="!isArray(item.value) && handleActive(item) ">
+        @if(isArray(item.value)) {
+          <shapes-menu class="h-5 w-5"
+            [item]="item"
+            [activeElement]="activeElement"
+            (handleActiveElement)="handleActive($event)">
+          </shapes-menu>
+        }
+
+        @else {
+          @if(isComment(item.value)) {
+            <new-thread class="w-5 h-5">
+              <button class="relative object-contain">
+                <img [ngClass]="[isActive(item.value) ? 'invert' : '' ]" [src]="item.icon" [alt]="item.name">
+              </button>
+            </new-thread>
+          } @else {
+            <button>
+              <img [ngClass]="['relative w-5 h-5 object-contain', isActive(item.value) ? 'invert' : '' ]" [src]="item.icon" [alt]="item.name">
+            </button>
+          }
+        }
+      </li>
+    }
+  </ul>
 
   <app-active></app-active>
 </nav>

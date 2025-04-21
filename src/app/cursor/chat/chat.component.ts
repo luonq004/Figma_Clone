@@ -1,13 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CursorMode, CursorState } from '../../../types/type';
 import { CursorSVGComponent } from '../../components/shared/cursor-svg/cursor-svg.component';
 

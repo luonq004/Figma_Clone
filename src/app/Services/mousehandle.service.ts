@@ -1,4 +1,4 @@
-import { inject, Injectable, NgZone } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { Subject } from 'rxjs';
 
 @Injectable()
@@ -32,12 +32,12 @@ export class MouseHandleService {
   }
 
   private handlePointerMove = (event: PointerEvent) => {
-    event.preventDefault();
+    // event.preventDefault();
     this.emitCursorPosition(event);
   };
 
   private handlePointerDown = (event: PointerEvent) => {
-    event.preventDefault();
+    // event.preventDefault();
     this.emitPointerDown(event);
   };
 

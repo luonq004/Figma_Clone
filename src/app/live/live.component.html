@@ -1,8 +1,10 @@
-@for (user of others; track user.id) {
-  <div class="container">
+<div id="canvas">
+  <canvas #canvasRef></canvas>
 
-    @for (r of reaction; track r.timestamp) {
-      <app-flying-reaction
+  @for (user of others; track user.id) {
+
+    @for (r of reaction; track r.point ) {
+      <app-flying-reaction style="pointer-events: none"
         [x]="r.point.x"
         [y]="r.point.y"
         [timestamp]="r.timestamp"
@@ -11,7 +13,7 @@
     }
 
     @if (cursor?.cursor) {
-      <app-chat
+      <app-chat style="pointer-events: none"
         [cursorUser]="cursor"
         [modeState]="cursorState"
         (updateModeState)="updateMode($event)"
@@ -25,7 +27,7 @@
 
     @if (user.presence.cursor) {
       <ng-container >
-        <app-cursor
+        <app-cursor style="pointer-events: none"
           [color]="colors[+user.connectionId % colors.length]"
           [x]="user.presence.cursor.x"
           [y]="user.presence.cursor.y"
@@ -33,7 +35,6 @@
         ></app-cursor>
       </ng-container>
     }
-  </div>
 
-}
-
+  }
+</div>

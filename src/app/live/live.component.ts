@@ -1,10 +1,14 @@
 import { CommonModule } from '@angular/common';
 import {
+  AfterViewInit,
   Component,
   ElementRef,
+  EventEmitter,
   HostListener,
   OnDestroy,
   OnInit,
+  Output,
+  ViewChild,
 } from '@angular/core';
 import { BaseUserMeta, Room, User } from '@liveblocks/client';
 import { Subscription } from 'rxjs';
@@ -38,7 +42,11 @@ import { IntervalService } from '../Services/interval.service';
   styleUrl: './live.component.css',
   providers: [MouseHandleService, IntervalService],
 })
-export class LiveComponent implements OnInit, OnDestroy {
+export class LiveComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('canvasRef') canvasRef!: ElementRef<HTMLCanvasElement>;
+
+  @Output() canvasReady: EventEmitter<HTMLCanvasElement> = new EventEmitter();
+
   private room: Room | null = null;
   private subscriptions: Subscription[] = [];
 
@@ -173,6 +181,10 @@ export class LiveComponent implements OnInit, OnDestroy {
     );
   }
 
+  ngAfterViewInit() {
+    this.canvasReady.emit(this.canvasRef.nativeElement);
+  }
+
   updateMyPresence(
     presence: Partial<{
       cursor: { x: number; y: number } | null;
@@ -198,6 +210,10 @@ export class LiveComponent implements OnInit, OnDestroy {
   get isReactionState(): boolean {
     return this.cursorState.mode === CursorMode.ReactionSelector;
   }
+
+  // getCanvasElement(): HTMLCanvasElement {
+  //   return this.canvasRef.nativeElement;
+  // }
 
   ngOnDestroy() {
     this.mouseService.detachMouseListeners(this.elementRef.nativeElement);

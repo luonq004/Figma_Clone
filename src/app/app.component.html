@@ -1,5 +1,12 @@
 <main class="h-screen overflow-hidden">
-  <app-navbar></app-navbar>
+  <app-navbar
+    [activeElement]="activeElement"
+    (handleActiveElement)="handleActiveElement($event)"
+    ></app-navbar>
 
-  <app-live></app-live>
+  <section class="flex h-full flex-row">
+    <app-left-sidebar></app-left-sidebar>
+    <app-live></app-live>
+    <app-right-sidebar></app-right-sidebar>
+  </section>
 </main>

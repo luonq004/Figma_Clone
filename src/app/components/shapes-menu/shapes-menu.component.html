@@ -1,0 +1,25 @@
+<button class="relative object-contain" [matMenuTriggerFor]="menu">
+  <img [ngClass]="isMenuElement ? 'invert' : '' "
+    [src]="isMenuElement ? activeElement?.icon : item.icon " [alt]="item.name">
+</button>
+<mat-menu class="mt-5 flex flex-col gap-y-1 border-none bg-primary-black py-4 text-white bg-black"
+  #menu="matMenu">
+    @for (element of item.value; track element.name) {
+      <button [ngClass]="['flex h-fit w-full justify-between gap-10 rounded-none px-5 py-3 focus:border-none',
+        activeElement?.value === element?.value ? 'bg-green-500' : 'hover:bg-gray-400']"
+        (click)="handleActive(element)"
+        >
+          <div class="group flex items-center gap-2">
+            <img [ngClass]="['w-5 h-5', activeElement?.value === element?.value ? 'invert' : '']"
+              [src]="element?.icon" [alt]="element?.name">
+
+            <p [ngClass]="['text-sm', activeElement?.value === element?.value ? 'text-black' :
+              'text-white']">
+              {{element.name}}
+            </p>
+
+          </div>
+      </button>
+    }
+</mat-menu>
+
