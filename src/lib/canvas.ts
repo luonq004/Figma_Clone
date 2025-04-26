@@ -1,12 +1,5 @@
 import { fabric } from 'fabric';
-// import {
-//   Gradient,
-//   IEvent,
-//   Pattern,
-//   Canvas,
-//   Object as FabricObject,
-//   Path,
-// } from 'fabric/fabric-impl';
+
 import { v4 as uuid4 } from 'uuid';
 
 import {
@@ -41,67 +34,6 @@ export const initializeFabric = ({
 
   // set canvas reference to fabricRef so we can use it later anywhere outside canvas listener
   return canvas;
-};
-
-// instantiate creation of custom fabric object/shape and add it to canvas
-export const handleCanvasMouseDown = ({
-  options,
-  canvas,
-  selectedShapeRef,
-  isDrawing,
-  shapeRef,
-}: CanvasMouseDown) => {
-  // get pointer coordinates
-  const pointer = canvas.getPointer(options.e);
-
-  /**
-   * get target object i.e., the object that is clicked
-   * findtarget() returns the object that is clicked
-   *
-   * findTarget: http://fabricjs.com/docs/fabric.Canvas.html#findTarget
-   */
-  const target = canvas.findTarget(options.e, false);
-
-  // set canvas drawing mode to false
-  canvas.isDrawingMode = false;
-
-  // if selected shape is freeform, set drawing mode to true and return
-  if (selectedShapeRef === 'freeform') {
-    isDrawing = true;
-    canvas.isDrawingMode = true;
-    canvas.freeDrawingBrush.width = 5;
-    return;
-  }
-
-  canvas.isDrawingMode = false;
-
-  // if target is the selected shape or active selection, set isDrawing to false
-  if (
-    target &&
-    (target.type === selectedShapeRef || target.type === 'activeSelection')
-  ) {
-    isDrawing = false;
-
-    // set active object to target
-    canvas.setActiveObject(target);
-
-    /**
-     * setCoords() is used to update the controls of the object
-     * setCoords: http://fabricjs.com/docs/fabric.Object.html#setCoords
-     */
-    target.setCoords();
-  } else {
-    isDrawing = true;
-
-    // create custom fabric object/shape and set it to shapeRef
-    shapeRef = createSpecificShape(selectedShapeRef, pointer as any);
-
-    // if shapeRef is not null, add it to canvas
-    if (shapeRef) {
-      // add: http://fabricjs.com/docs/fabric.Canvas.html#add
-      canvas.add(shapeRef);
-    }
-  }
 };
 
 // handle mouse move event on canvas to draw shapes with different dimensions
@@ -170,35 +102,6 @@ export const handleCanvasMouseDown = ({
 //   // sync shape in storage
 //   if (shapeRef.current?.objectId) {
 //     syncShapeInStorage(shapeRef.current);
-//   }
-// };
-
-// handle mouse up event on canvas to stop drawing shapes
-// export const handleCanvasMouseUp = ({
-//   canvas,
-//   isDrawing,
-//   shapeRef,
-//   activeObjectRef,
-//   selectedShapeRef,
-//   syncShapeInStorage,
-//   setActiveElement,
-// }: CanvasMouseUp) => {
-//   isDrawing.current = false;
-//   if (selectedShapeRef.current === 'freeform') return;
-
-//   // sync shape in storage as drawing is stopped
-//   syncShapeInStorage(shapeRef.current);
-
-//   // set everything to null
-//   shapeRef.current = null;
-//   activeObjectRef.current = null;
-//   selectedShapeRef.current = null;
-
-//   // if canvas is not in drawing mode, set active element to default nav element after 700ms
-//   if (!canvas.isDrawingMode) {
-//     setTimeout(() => {
-//       setActiveElement(defaultNavElement);
-//     }, 700);
 //   }
 // };
 
@@ -357,7 +260,7 @@ export const handleCanvasMouseDown = ({
 //      *
 //      * enlivenObjects: http://fabricjs.com/docs/fabric.util.html#.enlivenObjectEnlivables
 //      */
-//     util.enlivenObjects(
+//     fabric.util.enlivenObjects(
 //       [objectData],
 //       (enlivenedObjects: fabric.Object[]) => {
 //         enlivenedObjects.forEach((enlivenedObj) => {

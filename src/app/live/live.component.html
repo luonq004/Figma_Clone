@@ -1,7 +1,7 @@
-<div id="canvas">
+<div>
   <canvas #canvasRef></canvas>
 
-  @for (user of others; track user.id) {
+  @for (user of others; track $index) {
 
     @for (r of reaction; track r.point ) {
       <app-flying-reaction style="pointer-events: none"

@@ -1,4 +1,4 @@
 export const environment = {
   LIVEBLOCKS_PUBLIC_KEY:
-    'pk_dev_ETtJlIhYlO9Yx4GYmRHT1qgwIWsBhV_RVX50tEOITmGooATUhinfE2fh7El_4_XL',
+    'pk_dev_04jIoCV1t-KlQnedMYcTz4TP4BYGTsfISMjDiiZb5r8tsDJY1fCMM49X6_h8cLjT',
 };
