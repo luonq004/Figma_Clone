@@ -2,11 +2,18 @@
   <app-navbar
     [activeElement]="activeElement"
     (handleActiveElement)="handleActiveElement($event)"
-    ></app-navbar>
+
+  ></app-navbar>
 
   <section class="flex h-full flex-row">
     <app-left-sidebar></app-left-sidebar>
     <app-live id="canvas"></app-live>
-    <app-right-sidebar></app-right-sidebar>
+    <app-right-sidebar
+      [elementAttributes]="elementAttributes"
+      (setElementAttributes)="handleSetElementAttributes($event)"
+      (syncShapeInStorage)="syncShapeInStorage($event)"
+    ></app-right-sidebar>
   </section>
+
+  <input (change)="handleImageUpload($event)" #check type="file" accept="image/*" class="hidden">
 </main>

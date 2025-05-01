@@ -1,9 +1,9 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { ActiveElement, NestedElement } from '../../../types/type';
-import { MATERIAL_STANDALONE_MODULES } from '../shared/material-standalone';
-import { CommonModule } from '@angular/common';
 import { DrawStateService } from '../../Services/drawState.service';
 import { LiveblocksService } from '../../Services/liveblocks.service';
+import { MATERIAL_STANDALONE_MODULES } from '../shared/material-standalone';
 
 @Component({
   selector: 'shapes-menu',
@@ -19,7 +19,6 @@ export class ShapesMenuComponent {
 
   @Input() item!: NestedElement | any;
   @Input() activeElement!: ActiveElement;
-  @Input() imageInput: HTMLElement | null = null;
 
   @Output() handleActiveElement = new EventEmitter<ActiveElement>();
 

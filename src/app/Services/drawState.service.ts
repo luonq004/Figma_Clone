@@ -1,12 +1,16 @@
 // drawState.service.ts
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
 import { fabric } from 'fabric';
+import { BehaviorSubject } from 'rxjs';
 import { createSpecificShape } from '../../lib/shapes';
 
 import { v4 as uuidv4 } from 'uuid';
 import { defaultNavElement } from '../../../constants';
-import { ActiveElement, CustomFabricObject } from '../../types/type';
+import {
+  ActiveElement,
+  Attributes,
+  CustomFabricObject,
+} from '../../types/type';
 
 @Injectable({ providedIn: 'root' })
 export class DrawStateService {
@@ -14,6 +18,7 @@ export class DrawStateService {
   fabricRef: fabric.Canvas | null = null;
   shapeRef: fabric.Object | null | any = null;
   activeObjectRef: fabric.Object | null | any = null;
+  isEditing: boolean | null = null;
 
   private isDrawingSubject = new BehaviorSubject<boolean>(false);
   isDrawing$ = this.isDrawingSubject.asObservable();
@@ -277,6 +282,75 @@ export class DrawStateService {
     this.fabricRef?.discardActiveObject().renderAll(); // clear selection + re-render
   }
 
+  handleCanvasSelectionCreated(
+    options: fabric.IEvent,
+    handleSetElementAttributes: (element: Attributes) => void
+  ) {
+    // if user is editing manually, return
+    if (this.isEditing) return;
+
+    // console.log(options);
+    // if no element is selected, return
+    if (!options?.selected) return;
+
+    // get the selected element
+    const selectedElement = options?.selected[0] as fabric.Object;
+
+    // if only one element is selected, set element attributes
+    if (selectedElement && options.selected.length === 1) {
+      // calculate scaled dimensions of the object
+      const scaledWidth = selectedElement?.scaleX
+        ? selectedElement?.width! * selectedElement?.scaleX
+        : selectedElement?.width;
+
+      const scaledHeight = selectedElement?.scaleY
+        ? selectedElement?.height! * selectedElement?.scaleY
+        : selectedElement?.height;
+
+      handleSetElementAttributes({
+        width: scaledWidth?.toFixed(0).toString() || '',
+        height: scaledHeight?.toFixed(0).toString() || '',
+        fill: selectedElement?.fill?.toString() || '',
+        stroke: selectedElement?.stroke || '',
+        // @ts-ignore
+        fontSize: selectedElement?.fontSize || '',
+        // @ts-ignore
+        fontFamily: selectedElement?.fontFamily || '',
+        // @ts-ignore
+        fontWeight: selectedElement?.fontWeight || '',
+      });
+    }
+  }
+
+  handleCanvasObjectScaling(
+    options: fabric.IEvent,
+    handleSetElementAttributes: (element: Attributes) => void
+  ) {
+    const selectedElement = options.target;
+
+    // calculate scaled dimensions of the object
+    const scaledWidth = selectedElement?.scaleX
+      ? selectedElement?.width! * selectedElement?.scaleX
+      : selectedElement?.width;
+
+    const scaledHeight = selectedElement?.scaleY
+      ? selectedElement?.height! * selectedElement?.scaleY
+      : selectedElement?.height;
+
+    handleSetElementAttributes({
+      width: scaledWidth?.toFixed(0).toString() || '',
+      height: scaledHeight?.toFixed(0).toString() || '',
+      fill: selectedElement?.fill?.toString() || '',
+      stroke: selectedElement?.stroke || '',
+      // @ts-ignore
+      fontSize: selectedElement?.fontSize || '',
+      // @ts-ignore
+      fontFamily: selectedElement?.fontFamily || '',
+      // @ts-ignore
+      fontWeight: selectedElement?.fontWeight || '',
+    });
+  }
+
   handleImageUpload(
     file: File,
     syncShapeInStorage: (shape: fabric.Object) => void
@@ -288,14 +362,14 @@ export class DrawStateService {
         img.scaleToWidth(200);
         img.scaleToHeight(200);
 
-        this.canvas?.add(img);
+        this.fabricRef?.add(img);
 
         // @ts-ignore
         img.objectId = uuidv4();
 
         this.shapeRef = img;
         syncShapeInStorage(img);
-        this.canvas?.requestRenderAll();
+        this.fabricRef?.requestRenderAll();
       });
     };
 
@@ -308,7 +382,7 @@ export class DrawStateService {
 
     if (!this.fabricRef) return;
 
-    console.log(canvasElement.clientWidth, canvasElement.clientHeight);
+    // console.log(canvasElement.clientWidth, canvasElement.clientHeight);
 
     this.fabricRef.setDimensions({
       width: canvasElement.clientWidth,
@@ -329,6 +403,38 @@ export class DrawStateService {
 
     return activeObjects;
   };
+
+  modifyShape(
+    property: string,
+    value: any,
+    syncShapeInStorage: (shape: fabric.Object) => void
+  ) {
+    const selectedElement = this.fabricRef?.getActiveObject();
+
+    if (!selectedElement || selectedElement?.type === 'activeSelection') return;
+
+    // if  property is width or height, set the scale of the selected element
+    if (property === 'width') {
+      selectedElement.set('scaleX', 1);
+      selectedElement.set('width', +value.target.value);
+    } else if (property === 'height') {
+      selectedElement.set('scaleY', 1);
+      selectedElement.set('height', +value.target.value);
+    } else {
+      if (
+        selectedElement[property as keyof object] ===
+        +(value.target as HTMLInputElement).value
+      )
+        return;
+
+      selectedElement.set(property as keyof fabric.Object, +value.target.value);
+    }
+
+    // set selectedElement to activeObjectRef
+    this.activeObjectRef = selectedElement;
+
+    syncShapeInStorage(selectedElement);
+  }
 
   handlePaste = (syncShapeInStorage: (shape: fabric.Object) => void) => {
     if (!this.fabricRef || !(this.fabricRef instanceof fabric.Canvas)) {

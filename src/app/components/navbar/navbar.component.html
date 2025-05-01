@@ -1,4 +1,4 @@
-<nav class="flex select-none items-center justify-between gap-4 bg-black px-5 text-white">
+<nav class="flex items-center justify-between gap-4 bg-black px-5 text-white">
   <img src="assets/logo.svg" alt="FigPro Logo" style="width: 58px; height: 20px;">
 
   <ul class="flex flex-row">
@@ -10,7 +10,9 @@
           <shapes-menu class="h-5 w-5"
             [item]="item"
             [activeElement]="activeElement"
-            (handleActiveElement)="handleActive($event)">
+            (handleActiveElement)="handleActive($event)"
+          >
+
           </shapes-menu>
         }
 

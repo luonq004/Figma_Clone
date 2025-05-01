@@ -1,21 +1,22 @@
 import {
   AfterViewInit,
   Component,
+  ElementRef,
   inject,
   OnDestroy,
   ViewChild,
 } from '@angular/core';
 
+import { Subscription } from 'rxjs';
 import { defaultNavElement } from '../../constants';
-import { handleResize, initializeFabric } from '../lib/canvas';
-import { ActiveElement } from '../types/type';
+import { initializeFabric } from '../lib/canvas';
+import { ActiveElement, Attributes } from '../types/type';
 import { LeftSidebarComponent } from './components/left-sidebar/left-sidebar.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { RightSidebarComponent } from './components/right-sidebar/right-sidebar.component';
 import { LiveComponent } from './live/live.component';
 import { DrawStateService } from './Services/drawState.service';
 import { LiveblocksService } from './Services/liveblocks.service';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -32,6 +33,8 @@ import { Subscription } from 'rxjs';
 })
 export class AppComponent implements AfterViewInit, OnDestroy {
   @ViewChild(LiveComponent) liveCom!: LiveComponent;
+  @ViewChild(NavbarComponent) navbarRef!: NavbarComponent;
+  @ViewChild('check') imageInputRef!: ElementRef<HTMLInputElement>;
 
   drawStateService: DrawStateService = inject(DrawStateService);
   liveBlockService: LiveblocksService = inject(LiveblocksService);
@@ -40,6 +43,16 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     name: '',
     value: '',
     icon: '',
+  };
+
+  elementAttributes: Attributes = {
+    width: '',
+    height: '',
+    fontSize: '',
+    fontFamily: '',
+    fontWeight: '',
+    fill: '#aabbcc',
+    stroke: '#aabbcc',
   };
 
   private resizeListener = () => this.drawStateService.handleResize();
@@ -85,6 +98,25 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     canvas.on('object:modified', (options) => {
       this.drawStateService.handleCanvasObjectModified(options, (object) =>
         this.syncShapeInStorage(object as fabric.Object & { objectId: string })
+      );
+    });
+
+    canvas.on('selection:created', (options) => {
+      this.drawStateService.handleCanvasSelectionCreated(options, (element) =>
+        this.handleSetElementAttributes(element)
+      );
+    });
+
+    canvas.on('selection:updated', (options) => {
+      console.log('ad');
+      this.drawStateService.handleCanvasSelectionCreated(options, (element) =>
+        this.handleSetElementAttributes(element)
+      );
+    });
+
+    canvas.on('object:scaling', (options) => {
+      this.drawStateService.handleCanvasObjectScaling(options, (element) =>
+        this.handleSetElementAttributes(element)
       );
     });
 
@@ -149,21 +181,22 @@ export class AppComponent implements AfterViewInit, OnDestroy {
         break;
 
       // upload an image to the canvas
-      // case "image":
-      //   // trigger the click event on the input element which opens the file dialog
-      //   imageInputRef.current?.click();
-      //   /**
-      //    * set drawing mode to false
-      //    * If the user is drawing on the canvas, we want to stop the
-      //    * drawing mode when clicked on the image item from the dropdown.
-      //    */
-      //   isDrawing.current = false;
+      case 'image':
+        //   // trigger the click event on the input element which opens the file dialog
+        //   imageInputRef.current?.click();
+        this.imageInputRef.nativeElement.click();
+        //   /**
+        //    * set drawing mode to false
+        //    * If the user is drawing on the canvas, we want to stop the
+        //    * drawing mode when clicked on the image item from the dropdown.
+        //    */
+        this.drawStateService.setIsDrawing(false);
 
-      //   if (fabricRef.current) {
-      //     // disable the drawing mode of canvas
-      //     fabricRef.current.isDrawingMode = false;
-      //   }
-      //   break;
+        if (this.drawStateService.fabricRef) {
+          //     // disable the drawing mode of canvas
+          this.drawStateService.fabricRef.isDrawingMode = false;
+        }
+        break;
 
       // for comments, do nothing
       case 'comments':
@@ -176,8 +209,36 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     }
   }
 
+  handleImageUpload(e: any) {
+    this.drawStateService.handleImageUpload(e.target.files[0], (object) =>
+      this.syncShapeInStorage(object as fabric.Object & { objectId: string })
+    );
+  }
+
   handleSetActiveElement(element: ActiveElement) {
     this.activeElement = element;
+  }
+
+  handleSetElementAttributes(
+    payload:
+      | { property: keyof Attributes | string; value: Event }
+      | Partial<Attributes>
+  ) {
+    if ('property' in payload && 'value' in payload) {
+      // Cập nhật một property
+      this.elementAttributes = {
+        ...this.elementAttributes,
+        [payload.property]: (payload.value.target as HTMLInputElement).value,
+      };
+    } else {
+      // Cập nhật nhiều property (chỉ những cái được truyền vào)
+      this.elementAttributes = {
+        ...this.elementAttributes,
+        ...payload,
+      };
+    }
+
+    console.log(this.elementAttributes);
   }
 
   deleteAllShapes(): boolean {

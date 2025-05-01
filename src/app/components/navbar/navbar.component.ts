@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   Component,
   ElementRef,
@@ -7,10 +8,9 @@ import {
 } from '@angular/core';
 import { navElements } from '../../../../constants';
 import { ActiveElement } from '../../../types/type';
-import { CommonModule } from '@angular/common';
 import { ActiveComponent } from '../../active/active.component';
-import { ShapesMenuComponent } from '../shapes-menu/shapes-menu.component';
 import { NewThreadComponent } from '../new-thread/new-thread.component';
+import { ShapesMenuComponent } from '../shapes-menu/shapes-menu.component';
 
 @Component({
   selector: 'app-navbar',
@@ -26,8 +26,6 @@ import { NewThreadComponent } from '../new-thread/new-thread.component';
 })
 export class NavbarComponent {
   @Input() activeElement!: ActiveElement;
-  @Input() imageInputRef!: ElementRef<HTMLInputElement>;
-  @Output() handleImageUpload!: (e: Event) => void;
   @Output() handleActiveElement = new EventEmitter<ActiveElement>();
 
   navItems = navElements;

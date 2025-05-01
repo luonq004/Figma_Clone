@@ -1,0 +1,21 @@
+<section class='flex flex-col border-b border-primary-grey-200'>
+  <div class='flex flex-col gap-4 px-6 py-3'>
+    @for (option of dimensionsOptions; track option.label) {
+      <div class="flex flex-1 items-center gap-3 rounded-sm">
+        <label class="text-[10px] font-bold leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" [for]="option.property">
+          {{option.label}}
+        </label>
+
+        <input type="number"
+        [id]="option.property"
+        placeholder="100"
+        min="10"
+        [value]="option.property === 'width' ? width : height"
+        (input)="handleInputChangeSize({ property: option.property , value: $event })"
+        (blur)="handleBlur()"
+        class="flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 bg-transparent border-transparent input-ring"
+        >
+      </div>
+    }
+  </div>
+</section>
