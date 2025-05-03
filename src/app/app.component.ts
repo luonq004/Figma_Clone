@@ -221,14 +221,14 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
   handleSetElementAttributes(
     payload:
-      | { property: keyof Attributes | string; value: Event }
+      | { property: keyof Attributes | string; value: string }
       | Partial<Attributes>
   ) {
     if ('property' in payload && 'value' in payload) {
       // Cập nhật một property
       this.elementAttributes = {
         ...this.elementAttributes,
-        [payload.property]: (payload.value.target as HTMLInputElement).value,
+        [payload.property]: payload.value,
       };
     } else {
       // Cập nhật nhiều property (chỉ những cái được truyền vào)
@@ -237,8 +237,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
         ...payload,
       };
     }
-
-    console.log(this.elementAttributes);
   }
 
   deleteAllShapes(): boolean {

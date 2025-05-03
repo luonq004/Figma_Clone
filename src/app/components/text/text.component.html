@@ -1,1 +1,29 @@
-<p>text works!</p>
+<div class='flex flex-col gap-3 border-b border-primary-grey-200 px-5 py-3'>
+  <h3 class='font-10px uppercase'>Text</h3>
+
+
+  <div class="flex flex-col gap-3">
+    <app-render-select
+      [config]="selectConfigs[0]"
+      [fontSize]="fontSize"
+      [fontFamily]="fontFamily"
+      [fontWeight]="fontWeight"
+      (handleSelectChange)="handleSelectChange($event)"
+    ></app-render-select>
+
+    <div class='flex gap-2'>
+      @for (config of selectConfigs.slice(1); track $index) {
+        <app-render-select
+          class="flex-1"
+          [config]="config"
+          [fontSize]="fontSize"
+          [fontFamily]="fontFamily"
+          [fontWeight]="fontWeight"
+          (handleSelectChange)="handleSelectChange($event)"
+        ></app-render-select>
+      }
+
+
+    </div>
+  </div>
+</div>

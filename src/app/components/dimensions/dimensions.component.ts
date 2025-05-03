@@ -13,7 +13,7 @@ export class DemensionsComponent {
   @Input() height!: string;
 
   @Output() handleInputChange = new EventEmitter<
-    { property: keyof Attributes | string; value: Event } | Partial<Attributes>
+    { property: keyof Attributes | string; value: string } | Partial<Attributes>
   >();
 
   @Output() handleBlurInput = new EventEmitter<void>();
@@ -23,12 +23,11 @@ export class DemensionsComponent {
     { label: 'H', property: 'height' },
   ];
 
-  handleInputChangeSize(
-    payload:
-      | { property: keyof Attributes | string; value: Event }
-      | Partial<Attributes>
-  ) {
-    this.handleInputChange.emit(payload);
+  handleInputChangeSize(property: keyof Attributes | string, event: Event) {
+    this.handleInputChange.emit({
+      property: property,
+      value: (event.target as HTMLInputElement).value,
+    });
   }
 
   handleBlur() {

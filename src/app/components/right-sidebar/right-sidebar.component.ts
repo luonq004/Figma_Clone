@@ -1,20 +1,23 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { Attributes } from '../../../types/type';
 import { DrawStateService } from '../../Services/drawState.service';
-import { DemensionsComponent } from '../demensions/dimensions.component';
+import { DemensionsComponent } from '../dimensions/dimensions.component';
+import { TextComponent } from '../text/text.component';
 
 @Component({
   selector: 'app-right-sidebar',
   standalone: true,
-  imports: [DemensionsComponent],
+  imports: [DemensionsComponent, TextComponent],
   templateUrl: './right-sidebar.component.html',
   styleUrl: './right-sidebar.component.css',
 })
 export class RightSidebarComponent {
   @Input() elementAttributes!: Attributes;
+
   @Output() setElementAttributes = new EventEmitter<
-    { property: keyof Attributes | string; value: Event } | Partial<Attributes>
+    { property: keyof Attributes | string; value: string } | Partial<Attributes>
   >();
+
   @Output() syncShapeInStorage = new EventEmitter<
     fabric.Object & { objectId: string }
   >();
@@ -23,9 +26,11 @@ export class RightSidebarComponent {
 
   handleInputChange(
     payload:
-      | { property: keyof Attributes | string; value: Event }
+      | { property: keyof Attributes | string; value: string }
       | Partial<Attributes>
   ) {
+    console.log(payload);
+
     if (!this.drawStateServices.isEditing)
       this.drawStateServices.isEditing = true;
 

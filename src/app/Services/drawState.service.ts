@@ -406,7 +406,7 @@ export class DrawStateService {
 
   modifyShape(
     property: string,
-    value: any,
+    value: string,
     syncShapeInStorage: (shape: fabric.Object) => void
   ) {
     const selectedElement = this.fabricRef?.getActiveObject();
@@ -416,18 +416,14 @@ export class DrawStateService {
     // if  property is width or height, set the scale of the selected element
     if (property === 'width') {
       selectedElement.set('scaleX', 1);
-      selectedElement.set('width', +value.target.value);
+      selectedElement.set('width', +value);
     } else if (property === 'height') {
       selectedElement.set('scaleY', 1);
-      selectedElement.set('height', +value.target.value);
+      selectedElement.set('height', +value);
     } else {
-      if (
-        selectedElement[property as keyof object] ===
-        +(value.target as HTMLInputElement).value
-      )
-        return;
+      if (selectedElement[property as keyof object] === value) return;
 
-      selectedElement.set(property as keyof fabric.Object, +value.target.value);
+      selectedElement.set(property as keyof fabric.Object, value);
     }
 
     // set selectedElement to activeObjectRef

@@ -1,0 +1,13 @@
+<mat-select
+  (valueChange)="handleChangeValueSelect(config!.property, $event)"
+  [placeholder]="
+    config?.property === 'fontFamily'
+      ? 'Choose a font'
+      : config?.property === 'fontSize'
+        ? '30'
+        : 'Semibold'"
+>
+  @for (option of config?.options; track option.value) {
+    <mat-option [value]="option.value">{{option.label}}</mat-option>
+  }
+</mat-select>
