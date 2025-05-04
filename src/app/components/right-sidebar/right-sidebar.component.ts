@@ -3,11 +3,18 @@ import { Attributes } from '../../../types/type';
 import { DrawStateService } from '../../Services/drawState.service';
 import { DemensionsComponent } from '../dimensions/dimensions.component';
 import { TextComponent } from '../text/text.component';
+import { ColorComponent } from '../color/color.component';
+import { ExportComponent } from '../export/export.component';
 
 @Component({
   selector: 'app-right-sidebar',
   standalone: true,
-  imports: [DemensionsComponent, TextComponent],
+  imports: [
+    DemensionsComponent,
+    TextComponent,
+    ColorComponent,
+    ExportComponent,
+  ],
   templateUrl: './right-sidebar.component.html',
   styleUrl: './right-sidebar.component.css',
 })
@@ -29,10 +36,8 @@ export class RightSidebarComponent {
       | { property: keyof Attributes | string; value: string }
       | Partial<Attributes>
   ) {
-    console.log(payload);
-
-    if (!this.drawStateServices.isEditing)
-      this.drawStateServices.isEditing = true;
+    // if (!this.drawStateServices.isEditing)
+    //   this.drawStateServices.isEditing = true;
 
     this.setElementAttributes.emit(payload);
 
@@ -49,6 +54,6 @@ export class RightSidebarComponent {
   }
 
   handleBlurInput() {
-    this.drawStateServices.isEditing = false;
+    // this.drawStateServices.isEditing = false;
   }
 }

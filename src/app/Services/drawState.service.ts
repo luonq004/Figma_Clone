@@ -287,7 +287,7 @@ export class DrawStateService {
     handleSetElementAttributes: (element: Attributes) => void
   ) {
     // if user is editing manually, return
-    if (this.isEditing) return;
+    // if (this.isEditing) return;
 
     // console.log(options);
     // if no element is selected, return
@@ -377,17 +377,37 @@ export class DrawStateService {
   }
 
   handleResize = () => {
-    const canvasElement = document.getElementById('canvas');
-    if (!canvasElement) return;
+    // const canvasElement = document.getElementById('canvas');
+    // if (!canvasElement) return;
 
-    if (!this.fabricRef) return;
+    // if (!this.fabricRef) return;
 
     // console.log(canvasElement.clientWidth, canvasElement.clientHeight);
 
-    this.fabricRef.setDimensions({
-      width: canvasElement.clientWidth,
-      height: canvasElement.clientHeight,
-    });
+    // this.fabricRef.setDimensions({
+    //   width: canvasElement.clientWidth,
+    //   height: canvasElement.clientHeight,
+    // });
+    const canvasElement = document.getElementById(
+      'canvas'
+    ) as HTMLCanvasElement | null;
+    if (!canvasElement || !this.fabricRef) return;
+
+    const width = canvasElement.clientWidth;
+    const height = canvasElement.clientHeight;
+
+    // Update DOM canvas attributes (actual drawing resolution)
+    canvasElement.width = width;
+    canvasElement.height = height;
+
+    // Update Fabric canvas dimensions
+    this.fabricRef.setWidth(width);
+    this.fabricRef.setHeight(height);
+
+    // Optional: force re-render or scale content
+    this.fabricRef.renderAll();
+
+    console.log('Canvas resized to:', width, height);
   };
 
   handleCopy = () => {

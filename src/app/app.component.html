@@ -6,9 +6,10 @@
   ></app-navbar>
 
   <section class="flex h-full flex-row">
-    <app-left-sidebar></app-left-sidebar>
-    <app-live id="canvas"></app-live>
+    <app-left-sidebar class="min-w-[227px]"></app-left-sidebar>
+    <app-live class="flex-1 overflow-hidden" id="canvas"></app-live>
     <app-right-sidebar
+      class="min-w-[227px]"
       [elementAttributes]="elementAttributes"
       (setElementAttributes)="handleSetElementAttributes($event)"
       (syncShapeInStorage)="syncShapeInStorage($event)"

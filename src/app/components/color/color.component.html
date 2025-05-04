@@ -1,1 +1,17 @@
-<p>color works!</p>
+<div class="flex flex-col gap-3 border-b border-primary-grey-200 p-5" >
+  <h3 class="font-10px uppercase">{{placeholder}}</h3>
+
+  <div  class="flex items-center gap-2 border border-primary-grey-200" (click)="handleOpenInput()">
+    <input
+      #Input
+      type='color'
+      [value]="attribute"
+      (input)="handleChangeColor(attributeType, $event)"
+    />
+    <label class="flex-1" for="">{{attribute}}</label>
+    <label class="flex h-7 w-8 items-center justify-center bg-primary-grey-100 text-[10px] leading-3"
+      for="">
+      90%
+    </label>
+  </div>
+</div>

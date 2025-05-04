@@ -108,7 +108,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     });
 
     canvas.on('selection:updated', (options) => {
-      console.log('ad');
       this.drawStateService.handleCanvasSelectionCreated(options, (element) =>
         this.handleSetElementAttributes(element)
       );

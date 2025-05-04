@@ -1,5 +1,12 @@
 <mat-select
   (valueChange)="handleChangeValueSelect(config!.property, $event)"
+  [value]="
+    config?.property === 'fontFamily'
+      ? fontFamily
+      : config?.property === 'fontSize'
+        ? fontSize
+        : fontWeight"
+
   [placeholder]="
     config?.property === 'fontFamily'
       ? 'Choose a font'
