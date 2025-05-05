@@ -13,6 +13,14 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+              "fabric",
+              "canvg",
+              "core-js",
+              "raf",
+              "html2canvas",
+              "rgbcolor"
+            ],
             "outputPath": "dist/figma",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -35,8 +43,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "1.5mb",
+                  "maximumError": "1.6mb"
                 },
                 {
                   "type": "anyComponentStyle",
