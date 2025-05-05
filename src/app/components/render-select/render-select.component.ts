@@ -31,8 +31,6 @@ export class RenderSelectComponent {
   >();
 
   handleChangeValueSelect(property: keyof Attributes | string, value: string) {
-    console.log(property, value);
-
     this.handleSelectChange.emit({
       property,
       value,

@@ -1,11 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  Output,
-} from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { navElements } from '../../../../constants';
 import { ActiveElement } from '../../../types/type';
 import { ActiveComponent } from '../../active/active.component';

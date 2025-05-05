@@ -164,7 +164,6 @@ export class DrawStateService {
 
     // check if the key pressed is ctrl/cmd + z (undo)
     if ((e?.ctrlKey || e?.metaKey) && e.keyCode === 90) {
-      console.log('z');
       undo();
     }
 
@@ -377,17 +376,6 @@ export class DrawStateService {
   }
 
   handleResize = () => {
-    // const canvasElement = document.getElementById('canvas');
-    // if (!canvasElement) return;
-
-    // if (!this.fabricRef) return;
-
-    // console.log(canvasElement.clientWidth, canvasElement.clientHeight);
-
-    // this.fabricRef.setDimensions({
-    //   width: canvasElement.clientWidth,
-    //   height: canvasElement.clientHeight,
-    // });
     const canvasElement = document.getElementById(
       'canvas'
     ) as HTMLCanvasElement | null;
@@ -406,8 +394,6 @@ export class DrawStateService {
 
     // Optional: force re-render or scale content
     this.fabricRef.renderAll();
-
-    console.log('Canvas resized to:', width, height);
   };
 
   handleCopy = () => {
