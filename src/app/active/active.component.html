@@ -5,7 +5,7 @@
     }
 
     @for (user of displayUser; track $index) {
-      <avatar [name]="genRandomName" otherStyles="-ml-3"></avatar>
+      <avatar [name]="nameMap[user.connectionId]" otherStyles="-ml-3"></avatar>
     }
 
     @if((others?.length ?? 0) > 3) {

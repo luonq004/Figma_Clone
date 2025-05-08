@@ -93,7 +93,7 @@ export class LiveComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.room = this.liveblocksService.getRoom();
+    this.room = this.liveblocksService.enterRoomOnce();
 
     if (this.room) {
       this.room.subscribe('others', (others) => {
